@@ -1,0 +1,21 @@
+{
+  "name": "Raw \u2194 Cooked \u2014 Leon Charles Coaching",
+  "short_name": "Raw \u2194 Cooked",
+  "description": "Convert raw or dry food weights to cooked weights and back, with macro estimates.",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#050506",
+  "theme_color": "#050506",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

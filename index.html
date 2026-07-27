@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#050506">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Raw ↔ Cooked">
+  <title>Raw ↔ Cooked | Leon Charles Coaching</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icon-192.png">
+  <link rel="apple-touch-icon" href="icon-192.png">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <section id="leadGate" class="lead-gate" aria-labelledby="leadGateTitle">
+    <div class="lead-gate-card">
+      <img class="gate-logo" src="logo.png" alt="Look Good Fitness — Leon Charles Coaching">
+
+      <p class="gate-kicker">FREE ACCESS</p>
+      <h1 id="leadGateTitle" class="gate-title">UNLOCK THE<br><span>RAW ↔ COOKED</span><br>CONVERTER</h1>
+
+      <p class="gate-copy">
+        Enter your details once and get instant access to the converter.
+      </p>
+
+      <form id="leadForm" class="lead-form" novalidate>
+        <label for="firstName">FIRST NAME</label>
+        <input id="firstName" name="firstName" type="text" autocomplete="given-name" placeholder="Leon" required>
+
+        <label for="email">EMAIL</label>
+        <input id="email" name="email" type="email" autocomplete="email" placeholder="you@email.com" required>
+
+        <button id="unlockBtn" type="submit" class="unlock-btn">
+          UNLOCK THE CONVERTER <span aria-hidden="true">›</span>
+        </button>
+
+        <p id="leadValidation" class="lead-validation" aria-live="polite"></p>
+
+        <label class="marketing-consent">
+          <input id="marketingConsent" name="marketingConsent" type="checkbox">
+          <span>I’d also like coaching tips, nutrition advice and updates from Leon Charles Coaching.</span>
+        </label>
+
+        <p class="gate-privacy">
+          Free access. No password required. You can unsubscribe from marketing at any time.
+        </p>
+      </form>
+    </div>
+  </section>
+
+  <main class="app">
+    <header class="brand-header">
+      <button class="info-button" id="infoBtn" type="button" aria-label="About conversion estimates">i</button>
+      <img class="main-logo" src="logo.png" alt="Look Good Fitness — Leon Charles Coaching">
+      <p class="strapline">SIMPLE <span>·</span> ACCURATE <span>·</span> NO GUESSWORK</p>
+      <div class="lime-rule"></div>
+    </header>
+
+    <section class="tool-heading">
+      <p class="tool-kicker">THE NUMBER ON YOUR SCALES ISN'T THE PROBLEM</p>
+      <h1>RAW <span class="arrow">↔</span> COOKED</h1>
+      <p class="subhead">MACRO CONVERTER</p>
+      <p class="description">Weigh it raw, eat it cooked — the numbers don't match. That's why you're stuck, not your willpower. Chuck the weight in below. <strong>No bollocks, no guessing.</strong></p>
+    </section>
+
+    <section class="converter" aria-label="Raw and cooked food converter">
+      <div class="search-area">
+        <span class="search-icon" aria-hidden="true">⌕</span>
+        <input id="foodSearch" type="search" placeholder="Search food..." autocomplete="off" aria-label="Search food">
+        <button id="clearSearch" class="clear-btn" type="button" aria-label="Clear food search" hidden>×</button>
+        <div id="foodSuggestions" class="suggestions" hidden></div>
+      </div>
+      <p class="examples">e.g. Chicken breast, Rice, Pasta, Potato, Salmon...</p>
+
+      <div id="selectedFoodBar" class="selected-food" hidden>
+        <span id="selectedFoodName"></span>
+        <button id="changeFood" type="button">CHANGE</button>
+      </div>
+
+      <div class="direction-switch" aria-label="Conversion direction">
+        <button id="rawBtn" class="direction-option active" type="button">
+          <span id="rawLabel">RAW / DRY</span>
+        </button>
+        <button id="swapBtn" class="swap" type="button" aria-label="Swap conversion direction">⇄</button>
+        <button id="cookedBtn" class="direction-option" type="button">COOKED</button>
+      </div>
+
+      <div class="weight-box">
+        <input id="weightInput" type="number" min="1" max="10000" inputmode="decimal" placeholder="100" aria-label="Food weight in grams">
+        <span>g</span>
+      </div>
+
+      <button id="convertBtn" class="convert-btn" type="button">
+        CONVERT <span aria-hidden="true">›</span>
+      </button>
+
+      <p id="validation" class="validation" aria-live="polite"></p>
+    </section>
+
+    <section id="result" class="results" hidden aria-live="polite">
+      <p class="results-kicker">RESULT</p>
+      <p id="resultFood" class="result-food"></p>
+
+      <div class="weight-result">
+        <div>
+          <span id="resultInputType" class="mini-label"></span>
+          <strong id="resultInputWeight"></strong>
+        </div>
+        <div class="result-equals">=</div>
+        <div>
+          <span id="resultOutputType" class="mini-label"></span>
+          <strong id="resultOutputWeight" class="lime"></strong>
+        </div>
+      </div>
+
+      <div class="macros">
+        <div class="macro">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2s1 4-2 7c-1.8 1.8-2 4.2-.6 5.8.7.8 1.7 1.2 2.6 1.2 2.5 0 4.5-2 4.5-4.5 0-4-4.5-9.5-4.5-9.5Zm-5 8s-3 3.2-3 6.3A6.7 6.7 0 0 0 11.7 23c3.7 0 6.8-3 6.8-6.7 0-.8-.2-1.8-.5-2.7-.8 3-3.4 5.3-6.6 5.3A5.5 5.5 0 0 1 6 13.4C6 12 6.8 10.7 8 10Z"/></svg>
+          <strong id="kcal">—</strong><span>KCAL</span>
+        </div>
+        <div class="macro">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3v7m3-7v7M5 3v4a4 4 0 0 0 8 0V3M9 11v10m8-18v18m0-18c3 2 3 8 0 10"/></svg>
+          <strong id="protein">—</strong><span>PROTEIN</span>
+        </div>
+        <div class="macro">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v18M8 5c4 1 4 4 4 4S8 8 8 5Zm8 0c-4 1-4 4-4 4s4-1 4-4ZM7 10c5 1 5 4 5 4s-5-1-5-4Zm10 0c-5 1-5 4-5 4s5-1 5-4ZM7 15c5 1 5 4 5 4s-5-1-5-4Zm10 0c-5 1-5 4-5 4s5-1 5-4Z"/></svg>
+          <strong id="carbs">—</strong><span>CARBS</span>
+        </div>
+        <div class="macro">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C8 7 5 11 5 15a7 7 0 0 0 14 0c0-4-3-8-7-13Z"/></svg>
+          <strong id="fat">—</strong><span>FAT</span>
+        </div>
+      </div>
+
+      <div class="per100">
+        <span id="per100Title">PER 100g COOKED</span>
+        <strong id="per100Kcal"></strong>
+        <p>Protein <span id="per100Protein"></span></p>
+        <p>Carbs <span id="per100Carbs"></span></p>
+        <p>Fat <span id="per100Fat"></span></p>
+      </div>
+
+      <p class="estimate-note">Cooking mainly changes water content. Exact cooked weights vary between batches, so conversions are estimates.</p>
+    </section>
+
+
+    <section class="coaching-cta" aria-label="1 to 1 coaching">
+      <div class="cta-glow"></div>
+      <div class="cta-copy">
+        <p class="cta-kicker">SORTED TODAY. WHAT ABOUT THE WEEKEND?</p>
+        <h2>1-2-1 ONLINE<br><span>COACHING</span></h2>
+        <p>This tool fixes today's plate. It doesn't fix Friday. Your mates say "just come out for one." Saturday you're asked again. Sunday you're calling the week a write-off. Same pattern, every week. That's not a numbers problem — that's not having a plan for the whole week, not just the easy days.</p>
+        <a id="coachingCta" class="coaching-btn" href="https://calendly.com/lookgoodfitnessltd/discoverycall" target="_blank" rel="noopener" role="button">
+          BOOK A COACHING CALL <span aria-hidden="true">›</span>
+        </a>
+        <p class="cta-note">Free discovery call. No hard sell — just an honest chat about where you're at and what it'll take.</p>
+      </div>
+    </section>
+
+<section class="benefits" aria-label="Benefits">
+      <div><span class="benefit-icon">ϟ</span><strong>QUICK &amp; EASY</strong></div>
+      <div><span class="benefit-icon">🍴</span><strong>ACCURATE MACROS</strong></div>
+      <div><span class="benefit-icon">💪</span><strong>NO GUESSWORK</strong></div>
+    </section>
+
+    <section class="coach-brand final-coach-brand">
+      <div class="smoke"></div>
+      <p class="coach-left">BETTER.<br>STRONGER.<br>LEANER.</p>
+      <img class="leon-cutout" src="leon-cutout.png" alt="Leon Charles">
+      <p class="coach-right">NO<br>EXCUSES.</p>
+
+    </section>
+  </main>
+
+  <dialog id="infoDialog">
+    <div class="dialog-panel">
+      <button id="closeInfo" type="button" aria-label="Close">×</button>
+      <img src="logo.png" alt="" class="dialog-logo">
+      <h2>HOW THIS WORKS</h2>
+      <p>Each food has an average cooked yield. The app converts between the uncooked and cooked weight, then calculates macros from the original raw or dry amount.</p>
+      <p>Water loss and absorption vary with cooking time, temperature and batch size, so the cooked weight is always an estimate.</p>
+      <p><strong>For the most accurate meal prep:</strong> weigh the full batch before and after cooking and use your own batch yield.</p>
+    </div>
+  </dialog>
+
+  <script src="app.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js'));
+    }
+  </script>
+</body>
+</html>
