@@ -28,7 +28,7 @@
 
       <form id="leadForm" class="lead-form" novalidate>
         <label for="firstName">FIRST NAME</label>
-        <input id="firstName" name="firstName" type="text" autocomplete="given-name" placeholder="Leon" required>
+        <input id="firstName" name="firstName" type="text" autocomplete="given-name" placeholder="First name" required>
 
         <label for="email">EMAIL</label>
         <input id="email" name="email" type="email" autocomplete="email" placeholder="you@email.com" required>
@@ -67,9 +67,9 @@
     </section>
 
     <section class="intro-video" aria-label="Why I built this">
-      <!-- Replace intro-video.mp4 with the real export once it's ready.
-           Poster frame is the screenshot you sent — swap that too if you want a different frame. -->
-      <video class="intro-video-player" controls playsinline preload="none" poster="intro-video-poster.jpg">
+      <!-- No poster image — preload="metadata" makes the browser show the video's own
+           first frame as the thumbnail, so it always matches whatever intro-video.mp4 is. -->
+      <video class="intro-video-player" controls playsinline preload="metadata">
         <source src="intro-video.mp4" type="video/mp4">
       </video>
     </section>
@@ -153,9 +153,14 @@
 
       <p class="estimate-note">Cooking mainly changes water content. Exact cooked weights vary between batches, so conversions are estimates.</p>
 
-      <button id="shareResult" class="share-btn" type="button">
-        SHARE THIS WITH A MATE <span aria-hidden="true">↗</span>
-      </button>
+      <div class="result-actions">
+        <button id="installBtn" class="save-btn" type="button" hidden>
+          SAVE THIS TOOL <span aria-hidden="true">⤓</span>
+        </button>
+        <button id="shareResult" class="share-btn" type="button">
+          SHARE THIS WITH A MATE <span aria-hidden="true">↗</span>
+        </button>
+      </div>
     </section>
 
     <section class="transformations" aria-label="Client transformations">
@@ -228,6 +233,17 @@
       <p>Each food has an average cooked yield. The app converts between the uncooked and cooked weight, then calculates macros from the original raw or dry amount.</p>
       <p>Water loss and absorption vary with cooking time, temperature and batch size, so the cooked weight is always an estimate.</p>
       <p><strong>For the most accurate meal prep:</strong> weigh the full batch before and after cooking and use your own batch yield.</p>
+    </div>
+  </dialog>
+
+  <dialog id="iosInstallDialog">
+    <div class="dialog-panel">
+      <button id="closeIosInstall" type="button" aria-label="Close">×</button>
+      <h2>SAVE THIS TOOL</h2>
+      <p>iPhone doesn't let sites install themselves — takes two taps to sort:</p>
+      <p><strong>1.</strong> Tap the <strong>Share</strong> icon at the bottom of Safari.</p>
+      <p><strong>2.</strong> Scroll down and tap <strong>"Add to Home Screen."</strong></p>
+      <p>It'll sit on your home screen like any other app — no App Store, no faff.</p>
     </div>
   </dialog>
 

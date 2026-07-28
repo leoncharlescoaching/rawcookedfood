@@ -43,7 +43,7 @@ h1 .arrow{font-style:normal;color:var(--lime);font-size:.78em}
 .subhead{margin:8px 0 0;color:#b8b9bd;font-weight:900;letter-spacing:.38em;font-size:clamp(.7rem,3.5vw,1rem)}
 .description{margin:20px auto 0;max-width:440px;color:#b5b6bb;line-height:1.35;text-transform:uppercase;font-size:.82rem;letter-spacing:.09em}
 .description strong{color:var(--lime);white-space:nowrap}
-.intro-video{margin:22px 28px 0}
+.intro-video{margin:22px 40px 0}
 .intro-video-player{
   display:block;
   width:100%;
@@ -131,23 +131,40 @@ h1 .arrow{font-style:normal;color:var(--lime);font-size:.78em}
 .per100 p{margin:5px 0 0;color:#a9aaae}
 .per100 p span{float:right;color:#fff}
 .estimate-note{clear:both;color:#898b90;font-size:.63rem;line-height:1.35;margin:10px 1px 0}
-.share-btn{
+.result-actions{
+  display:flex;
+  gap:10px;
+  margin-top:16px;
+}
+.share-btn,.save-btn{
   display:flex;
   align-items:center;
   justify-content:center;
   gap:8px;
-  width:100%;
+  flex:1;
   min-height:52px;
-  margin-top:16px;
+  font-family:Impact,"Arial Black",sans-serif;
+  font-size:.85rem;
+  letter-spacing:.03em;
+}
+.share-btn{
   border:1px solid #3a3c41;
   border-radius:14px;
   background:linear-gradient(180deg,#17181a,#101113);
   color:var(--lime);
-  font-family:Impact,"Arial Black",sans-serif;
-  font-size:.88rem;
-  letter-spacing:.03em;
 }
 .share-btn span{font-size:1.1rem;line-height:1}
+.save-btn{
+  border:0;
+  border-radius:14px;
+  background:linear-gradient(90deg,#cfff00,#b6f500);
+  color:#090a09;
+  box-shadow:0 8px 20px rgba(199,255,0,.12);
+}
+.save-btn span{font-size:1.05rem;line-height:1}
+@media(max-width:360px){
+  .result-actions{flex-direction:column}
+}
 
 /* Transformations — real client before/afters */
 .transformations{margin:22px 28px 0}

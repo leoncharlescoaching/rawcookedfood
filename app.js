@@ -346,4 +346,56 @@ if(shareBtn){
   });
 }
 
+// ----------------------------------------------------
+// Save / install this tool
+// ----------------------------------------------------
+const installBtn=$("installBtn");
+const iosInstallDialog=$("iosInstallDialog");
+
+function isStandalone(){
+  return window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true;
+}
+function isIos(){
+  return /iphone|ipad|ipod/i.test(window.navigator.userAgent) && !window.MSStream;
+}
+
+let deferredInstallPrompt=null;
+
+if(installBtn && !isStandalone()){
+  if(isIos()){
+    // iOS has no install prompt API — show the button and walk them through it manually.
+    installBtn.hidden=false;
+  }
+
+  window.addEventListener("beforeinstallprompt",(event)=>{
+    event.preventDefault();
+    deferredInstallPrompt=event;
+    installBtn.hidden=false;
+  });
+
+  installBtn.addEventListener("click",async()=>{
+    if(deferredInstallPrompt){
+      deferredInstallPrompt.prompt();
+      try{ await deferredInstallPrompt.userChoice; }catch(err){ /* dismissed */ }
+      deferredInstallPrompt=null;
+      installBtn.hidden=true;
+      return;
+    }
+    if(isIos() && iosInstallDialog){
+      iosInstallDialog.showModal();
+    }
+  });
+
+  window.addEventListener("appinstalled",()=>{
+    installBtn.hidden=true;
+    deferredInstallPrompt=null;
+  });
+}
+
+if(iosInstallDialog){
+  const closeIosInstall=$("closeIosInstall");
+  if(closeIosInstall) closeIosInstall.addEventListener("click",()=>iosInstallDialog.close());
+  iosInstallDialog.addEventListener("click",e=>{if(e.target===iosInstallDialog)iosInstallDialog.close();});
+}
+
 updateBaseLabel();
