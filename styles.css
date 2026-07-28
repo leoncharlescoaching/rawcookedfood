@@ -69,6 +69,8 @@ h1 .arrow{font-style:normal;color:var(--lime);font-size:.78em}
   letter-spacing:.03em;
   pointer-events:none;
 }
+.save-tool-section{margin:14px 28px 0}
+.save-btn-standalone{width:100%}
 .converter{padding:0 28px}
 .search-area{position:relative}
 .search-area input{
