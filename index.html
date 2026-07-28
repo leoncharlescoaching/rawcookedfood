@@ -69,9 +69,12 @@
     <section class="intro-video" aria-label="Why I built this">
       <!-- No poster image — preload="metadata" makes the browser show the video's own
            first frame as the thumbnail, so it always matches whatever intro-video.mp4 is. -->
-      <video class="intro-video-player" controls playsinline preload="metadata">
-        <source src="intro-video.mp4" type="video/mp4">
-      </video>
+      <div class="intro-video-wrap">
+        <video id="introVideo" class="intro-video-player" controls playsinline preload="metadata">
+          <source src="intro-video.mp4" type="video/mp4">
+        </video>
+        <span id="videoBadge" class="video-badge">UNDER 1 MIN · WHY I MADE THIS</span>
+      </div>
     </section>
 
     <section class="converter" aria-label="Raw and cooked food converter">

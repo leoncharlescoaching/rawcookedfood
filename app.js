@@ -398,4 +398,10 @@ if(iosInstallDialog){
   iosInstallDialog.addEventListener("click",e=>{if(e.target===iosInstallDialog)iosInstallDialog.close();});
 }
 
+const introVideo=$("introVideo");
+const videoBadge=$("videoBadge");
+if(introVideo && videoBadge){
+  introVideo.addEventListener("play",()=>{videoBadge.hidden=true;});
+}
+
 updateBaseLabel();
