@@ -417,4 +417,18 @@ if(saveInstructionsDialog){
   saveInstructionsDialog.addEventListener("click",e=>{if(e.target===saveInstructionsDialog)saveInstructionsDialog.close();});
 }
 
+// ----------------------------------------------------
+// Force a real thumbnail frame on iOS Safari
+// ----------------------------------------------------
+// iOS Safari loads duration/dimensions with preload="metadata" but doesn't actually
+// decode and paint a visible frame — it just shows black until playback starts.
+// Nudging currentTime forces a real decode+paint of the video's own first frame,
+// so the thumbnail always matches whatever intro-video.mp4 currently is.
+const introVideo=$("introVideo");
+if(introVideo){
+  introVideo.addEventListener("loadedmetadata",()=>{
+    try{ introVideo.currentTime=0.05; }catch(err){ /* ignore */ }
+  },{once:true});
+}
+
 updateBaseLabel();
