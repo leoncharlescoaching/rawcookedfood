@@ -345,7 +345,8 @@ if(shareBtn){
 // Save / install this tool
 // ----------------------------------------------------
 const installBtn=$("installBtn");
-const iosInstallDialog=$("iosInstallDialog");
+const saveInstructionsDialog=$("saveInstructionsDialog");
+const saveInstructionsBody=$("saveInstructionsBody");
 
 function isStandalone(){
   return window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true;
@@ -353,50 +354,67 @@ function isStandalone(){
 function isIos(){
   return /iphone|ipad|ipod/i.test(window.navigator.userAgent) && !window.MSStream;
 }
+function isMobile(){
+  return /android|iphone|ipad|ipod|mobile/i.test(window.navigator.userAgent);
+}
+function isMac(){
+  return /mac/i.test(window.navigator.platform || window.navigator.userAgent);
+}
 
 let deferredInstallPrompt=null;
 
-if(installBtn && !isStandalone()){
-  if(isIos()){
-    // iOS has no install prompt API — show the button and walk them through it manually.
-    installBtn.hidden=false;
-  }
-
-  window.addEventListener("beforeinstallprompt",(event)=>{
-    event.preventDefault();
-    deferredInstallPrompt=event;
-    installBtn.hidden=false;
-  });
-
-  installBtn.addEventListener("click",async()=>{
-    if(deferredInstallPrompt){
-      deferredInstallPrompt.prompt();
-      try{ await deferredInstallPrompt.userChoice; }catch(err){ /* dismissed */ }
-      deferredInstallPrompt=null;
-      installBtn.hidden=true;
-      return;
-    }
-    if(isIos() && iosInstallDialog){
-      iosInstallDialog.showModal();
-    }
-  });
-
-  window.addEventListener("appinstalled",()=>{
+if(installBtn){
+  if(isStandalone()){
+    // Already installed/running as an app — nothing left for this button to do.
     installBtn.hidden=true;
-    deferredInstallPrompt=null;
-  });
+  }else{
+    window.addEventListener("beforeinstallprompt",(event)=>{
+      event.preventDefault();
+      deferredInstallPrompt=event;
+    });
+
+    installBtn.addEventListener("click",async()=>{
+      // Chrome/Edge/Android — real native install prompt when available.
+      if(deferredInstallPrompt){
+        deferredInstallPrompt.prompt();
+        try{ await deferredInstallPrompt.userChoice; }catch(err){ /* dismissed */ }
+        deferredInstallPrompt=null;
+        return;
+      }
+
+      // Everyone else — no programmatic install/bookmark API exists in any browser,
+      // so show the right manual steps for their platform instead.
+      if(!saveInstructionsDialog || !saveInstructionsBody) return;
+
+      if(isIos()){
+        saveInstructionsBody.innerHTML=`
+          <p>iPhone doesn't let sites install themselves — takes two taps to sort:</p>
+          <p><strong>1.</strong> Tap the <strong>Share</strong> icon at the bottom of Safari.</p>
+          <p><strong>2.</strong> Scroll down and tap <strong>"Add to Home Screen."</strong></p>
+          <p>It'll sit on your home screen like any other app — no App Store, no faff.</p>`;
+      }else if(isMobile()){
+        saveInstructionsBody.innerHTML=`
+          <p>Tap your browser's menu button, then look for <strong>"Add to Home screen"</strong> or <strong>"Install app."</strong></p>
+          <p>It'll sit on your home screen like any other app.</p>`;
+      }else{
+        saveInstructionsBody.innerHTML=`
+          <p>Press <strong>${isMac() ? "Cmd+D" : "Ctrl+D"}</strong> to bookmark this page in your browser.</p>
+          <p>Some browsers can also install this as a standalone app — check your browser's menu for an <strong>"Install"</strong> option.</p>`;
+      }
+      saveInstructionsDialog.showModal();
+    });
+
+    window.addEventListener("appinstalled",()=>{
+      installBtn.hidden=true;
+      deferredInstallPrompt=null;
+    });
+  }
 }
 
-if(iosInstallDialog){
-  const closeIosInstall=$("closeIosInstall");
-  if(closeIosInstall) closeIosInstall.addEventListener("click",()=>iosInstallDialog.close());
-  iosInstallDialog.addEventListener("click",e=>{if(e.target===iosInstallDialog)iosInstallDialog.close();});
-}
-
-const introVideo=$("introVideo");
-const videoBadge=$("videoBadge");
-if(introVideo && videoBadge){
-  introVideo.addEventListener("play",()=>{videoBadge.hidden=true;});
+if(saveInstructionsDialog){
+  const closeSaveInstructions=$("closeSaveInstructions");
+  if(closeSaveInstructions) closeSaveInstructions.addEventListener("click",()=>saveInstructionsDialog.close());
+  saveInstructionsDialog.addEventListener("click",e=>{if(e.target===saveInstructionsDialog)saveInstructionsDialog.close();});
 }
 
 updateBaseLabel();
