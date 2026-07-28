@@ -167,6 +167,7 @@ const foods = [
 
 let selected = null;
 let mode = "base-to-cooked";
+let lastResult = null;
 
 const $ = id => document.getElementById(id);
 const foodSearch = $("foodSearch");
@@ -285,6 +286,14 @@ function convert(){
 
   $("result").hidden=false;
   $("result").scrollIntoView({behavior:"smooth",block:"nearest"});
+
+  lastResult={
+    foodName:selected.name,
+    inputType,outputType,
+    inputWeight:fmtWeight(inputWeight),
+    outputWeight:fmtWeight(outputWeight),
+    kcal:Math.round(selected.kcal*m)
+  };
 }
 
 foodSearch.addEventListener("input",()=>{
@@ -305,5 +314,36 @@ const info=$("infoDialog");
 $("infoBtn").addEventListener("click",()=>info.showModal());
 $("closeInfo").addEventListener("click",()=>info.close());
 info.addEventListener("click",e=>{if(e.target===info)info.close();});
+
+const shareBtn=$("shareResult");
+if(shareBtn){
+  const shareLabel=shareBtn.innerHTML;
+  shareBtn.addEventListener("click",async()=>{
+    const url=window.location.href.split("#")[0].split("?")[0];
+    const food=lastResult?lastResult.foodName.toLowerCase():"food";
+    const detail=lastResult
+      ? `${lastResult.inputWeight} ${lastResult.inputType.toLowerCase()} ${food} = ${lastResult.outputWeight} ${lastResult.outputType.toLowerCase()}. `
+      : "";
+    const text=`Turns out ${detail}I've been weighing my food wrong this whole time. Free converter, worth two minutes:`;
+
+    if(navigator.share){
+      try{ await navigator.share({title:"Raw ↔ Cooked Macro Converter",text,url}); }
+      catch(err){ /* user cancelled share sheet — no action needed */ }
+      return;
+    }
+
+    if(navigator.clipboard){
+      try{
+        await navigator.clipboard.writeText(`${text} ${url}`);
+        shareBtn.textContent="LINK COPIED";
+        setTimeout(()=>{ shareBtn.innerHTML=shareLabel; },2200);
+      }catch(err){
+        window.prompt("Copy this link:",url);
+      }
+    }else{
+      window.prompt("Copy this link:",url);
+    }
+  });
+}
 
 updateBaseLabel();
