@@ -370,11 +370,11 @@ body.gated{
   margin:0 auto 24px;
 }
 .gate-kicker{
-  margin:0 0 10px;
+  margin:0 0 12px;
   color:var(--lime);
-  font-size:.72rem;
+  font-size:1.15rem;
   font-weight:950;
-  letter-spacing:.28em;
+  letter-spacing:.18em;
 }
 .gate-title{
   margin:0;
