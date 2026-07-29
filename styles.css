@@ -451,6 +451,22 @@ body.gated{
   color:#ff8989;
   font-size:.75rem;
 }
+.privacy-consent,.marketing-consent{
+  display:flex;
+  align-items:flex-start;
+  gap:10px;
+  margin:14px 2px 0;
+  color:#a7a9ad;
+  font-size:.72rem;
+  line-height:1.4;
+}
+.privacy-consent input,.marketing-consent input{
+  width:18px;
+  height:18px;
+  margin:1px 0 0;
+  accent-color:var(--lime);
+  flex:0 0 auto;
+}
 .gate-privacy{
   margin:13px 8px 0;
   color:#76787d;

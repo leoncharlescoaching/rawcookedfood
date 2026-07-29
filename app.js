@@ -36,10 +36,14 @@ async function submitLead(payload){
     capturedAt: new Date().toISOString()
   }));
 
-  // No consent checkbox on this form — everyone who signs up goes to Mailchimp.
-  // This relies on the Mailchimp audience having double opt-in switched on, so the
-  // confirmation email people get from Mailchimp is what provides UK PECR-compliant
-  // consent, rather than a checkbox on this page.
+  // Only subscribe them in Mailchimp if they ticked the separate, optional marketing
+  // checkbox. The privacy checkbox is required to use the tool at all, but that's
+  // consent to store their details for the tool itself — not the same thing as
+  // marketing consent, which UK PECR requires to be freely given, not bundled in.
+  if(!payload.marketingConsent){
+    return { ok:true, mode:"local-only" };
+  }
+
   const params = new URLSearchParams();
   params.append("FNAME", payload.firstName);
   params.append("EMAIL", payload.email);
@@ -71,6 +75,8 @@ leadForm.addEventListener("submit", async (event) => {
 
   const firstName = document.getElementById("firstName").value.trim();
   const email = document.getElementById("email").value.trim().toLowerCase();
+  const privacyConsent = document.getElementById("privacyConsent").checked;
+  const marketingConsent = document.getElementById("marketingConsent").checked;
 
   if(firstName.length < 2){
     leadValidation.textContent = "Enter your first name.";
@@ -84,6 +90,12 @@ leadForm.addEventListener("submit", async (event) => {
     return;
   }
 
+  if(!privacyConsent){
+    leadValidation.textContent = "Please tick the box to confirm you're happy for us to store your details.";
+    document.getElementById("privacyConsent").focus();
+    return;
+  }
+
   unlockBtn.disabled = true;
   unlockBtn.textContent = "UNLOCKING...";
 
@@ -91,6 +103,7 @@ leadForm.addEventListener("submit", async (event) => {
     await submitLead({
       firstName,
       email,
+      marketingConsent,
       source:"raw-cooked-converter"
     });
 
