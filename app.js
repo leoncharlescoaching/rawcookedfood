@@ -36,10 +36,14 @@ async function submitLead(payload){
     capturedAt: new Date().toISOString()
   }));
 
-  // No consent checkbox on this form — everyone who signs up goes to Mailchimp.
-  // This relies on the Mailchimp audience having double opt-in switched on, so the
-  // confirmation email people get from Mailchimp is what provides UK PECR-compliant
-  // consent, rather than a checkbox on this page.
+  // Only subscribe them in Mailchimp if they ticked the separate, optional marketing
+  // checkbox. The privacy checkbox is required to use the tool at all, but that's
+  // consent to store their details for the tool itself — not the same thing as
+  // marketing consent, which UK PECR requires to be freely given, not bundled in.
+  if(!payload.marketingConsent){
+    return { ok:true, mode:"local-only" };
+  }
+
   const params = new URLSearchParams();
   params.append("FNAME", payload.firstName);
   params.append("EMAIL", payload.email);
@@ -71,6 +75,8 @@ leadForm.addEventListener("submit", async (event) => {
 
   const firstName = document.getElementById("firstName").value.trim();
   const email = document.getElementById("email").value.trim().toLowerCase();
+  const privacyConsent = document.getElementById("privacyConsent").checked;
+  const marketingConsent = document.getElementById("marketingConsent").checked;
 
   if(firstName.length < 2){
     leadValidation.textContent = "Enter your first name.";
@@ -84,6 +90,12 @@ leadForm.addEventListener("submit", async (event) => {
     return;
   }
 
+  if(!privacyConsent){
+    leadValidation.textContent = "Please tick the box to confirm you're happy for us to store your details.";
+    document.getElementById("privacyConsent").focus();
+    return;
+  }
+
   unlockBtn.disabled = true;
   unlockBtn.textContent = "UNLOCKING...";
 
@@ -91,6 +103,7 @@ leadForm.addEventListener("submit", async (event) => {
     await submitLead({
       firstName,
       email,
+      marketingConsent,
       source:"raw-cooked-converter"
     });
 
@@ -157,7 +170,27 @@ const foods = [
   {name:"Cauliflower", aliases:[], base:"RAW", yield:0.90, kcal:25, protein:1.9, carbs:5.0, fat:0.3},
   {name:"Onion", aliases:[], base:"RAW", yield:0.85, kcal:40, protein:1.1, carbs:9.3, fat:0.1},
   {name:"Courgette", aliases:["zucchini"], base:"RAW", yield:0.85, kcal:17, protein:1.2, carbs:3.1, fat:0.3},
-  {name:"Asparagus", aliases:[], base:"RAW", yield:0.90, kcal:20, protein:2.2, carbs:3.9, fat:0.1}
+  {name:"Asparagus", aliases:[], base:"RAW", yield:0.90, kcal:20, protein:2.2, carbs:3.9, fat:0.1},
+
+  {name:"Halloumi", aliases:["halloumi cheese"], base:"RAW", yield:0.82, kcal:320, protein:22.0, carbs:2.0, fat:25.0},
+  {name:"Tofu, firm", aliases:["tofu","firm tofu","beancurd"], base:"RAW", yield:0.80, kcal:144, protein:15.5, carbs:3.0, fat:8.7},
+  {name:"Gammon", aliases:["gammon joint","ham joint"], base:"RAW", yield:0.72, kcal:130, protein:20.0, carbs:0, fat:5.5},
+  {name:"Pork chop", aliases:["pork chops"], base:"RAW", yield:0.74, kcal:152, protein:20.5, carbs:0, fat:7.5},
+  {name:"Chicken wings", aliases:["wings","chicken wing"], base:"RAW", yield:0.68, kcal:203, protein:17.5, carbs:0, fat:14.6},
+  {name:"Mackerel", aliases:[], base:"RAW", yield:0.80, kcal:205, protein:18.6, carbs:0, fat:13.9},
+  {name:"Sea bass", aliases:["seabass"], base:"RAW", yield:0.82, kcal:97, protein:18.4, carbs:0, fat:2.5},
+
+  {name:"Black beans, dried", aliases:["black beans"], base:"DRY", yield:2.30, kcal:341, protein:21.6, carbs:62.4, fat:1.4},
+  {name:"Kidney beans, dried", aliases:["kidney beans","red kidney beans"], base:"DRY", yield:2.30, kcal:333, protein:24.0, carbs:60.0, fat:0.8},
+  {name:"Butter beans, dried", aliases:["butterbeans","lima beans"], base:"DRY", yield:2.30, kcal:335, protein:21.0, carbs:60.0, fat:1.5},
+  {name:"Cannellini beans, dried", aliases:["cannellini","white kidney beans"], base:"DRY", yield:2.30, kcal:333, protein:23.4, carbs:60.0, fat:0.9},
+  {name:"Edamame", aliases:["edamame beans","soy beans"], base:"RAW", yield:0.95, kcal:121, protein:11.9, carbs:8.9, fat:5.2},
+
+  {name:"Tenderstem broccoli", aliases:["tenderstem","broccolini"], base:"RAW", yield:0.90, kcal:35, protein:3.5, carbs:4.6, fat:0.6},
+  {name:"Kale", aliases:[], base:"RAW", yield:0.70, kcal:49, protein:4.3, carbs:8.8, fat:0.9},
+  {name:"Cabbage", aliases:["white cabbage","green cabbage"], base:"RAW", yield:0.80, kcal:25, protein:1.3, carbs:5.8, fat:0.1},
+  {name:"Sweetcorn", aliases:["corn","corn kernels"], base:"RAW", yield:0.95, kcal:86, protein:3.2, carbs:19.0, fat:1.2},
+  {name:"Beetroot", aliases:["beets","beet"], base:"RAW", yield:0.91, kcal:43, protein:1.6, carbs:9.6, fat:0.2}
 ];
 
 let selected = null;
@@ -271,13 +304,13 @@ function convert(){
   $("carbs").textContent=fmtMacro(selected.carbs*m);
   $("fat").textContent=fmtMacro(selected.fat*m);
 
-  const per100Base = mode==="base-to-cooked" ? (100/selected.yield) : (100/selected.yield);
-  const per100m=per100Base/100;
-  $("per100Title").textContent="PER 100g COOKED";
-  $("per100Kcal").textContent=`${Math.round(selected.kcal*per100m)} KCAL`;
-  $("per100Protein").textContent=fmtMacro(selected.protein*per100m);
-  $("per100Carbs").textContent=fmtMacro(selected.carbs*per100m);
-  $("per100Fat").textContent=fmtMacro(selected.fat*per100m);
+  // Was a fixed "per 100g cooked" reference regardless of what was actually weighed out —
+  // now shows the totals for the exact cooked amount from this conversion instead.
+  $("per100Title").textContent=`PER ${fmtWeight(cookedWeight)} COOKED`;
+  $("per100Kcal").textContent=`${Math.round(selected.kcal*m)} KCAL`;
+  $("per100Protein").textContent=fmtMacro(selected.protein*m);
+  $("per100Carbs").textContent=fmtMacro(selected.carbs*m);
+  $("per100Fat").textContent=fmtMacro(selected.fat*m);
 
   $("result").hidden=false;
   $("result").scrollIntoView({behavior:"smooth",block:"nearest"});
