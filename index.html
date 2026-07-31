@@ -14,6 +14,7 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+  <iframe name="mailchimpSubmitFrame" title="Mailchimp signup submission" hidden></iframe>
 
   <section id="leadGate" class="lead-gate" aria-labelledby="leadGateTitle">
     <div class="lead-gate-card">
@@ -26,12 +27,26 @@
         Enter your details once and get instant access to the converter.
       </p>
 
-      <form id="leadForm" class="lead-form" novalidate>
+      <form id="leadForm"
+            class="lead-form"
+            action="https://lookgoodfitness.us5.list-manage.com/subscribe/post?u=9d11a72a3736b1f1dd92fdfc9&amp;id=b895da0481&amp;f_id=00c78de3f0"
+            method="post"
+            target="mailchimpSubmitFrame"
+            novalidate>
         <label for="firstName">FIRST NAME</label>
-        <input id="firstName" name="firstName" type="text" autocomplete="given-name" placeholder="First name" required>
+        <input id="firstName" name="FNAME" type="text" autocomplete="given-name" placeholder="First name" required>
 
         <label for="email">EMAIL</label>
-        <input id="email" name="email" type="email" autocomplete="email" placeholder="you@email.com" required>
+        <input id="email" name="EMAIL" type="email" autocomplete="email" placeholder="you@email.com" required>
+
+        <input type="hidden" name="tags" value="3512685">
+
+        <div aria-hidden="true" style="position:absolute; left:-5000px;">
+          <input type="text"
+                 name="b_9d11a72a3736b1f1dd92fdfc9_b895da0481"
+                 tabindex="-1"
+                 value="">
+        </div>
 
         <button id="unlockBtn" type="submit" class="unlock-btn">
           UNLOCK THE CONVERTER <span aria-hidden="true">›</span>
@@ -246,6 +261,46 @@
     </div>
   </dialog>
 
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const leadForm = document.getElementById('leadForm');
+      if (!leadForm) return;
+
+      leadForm.addEventListener('submit', function () {
+        const firstName = document.getElementById('firstName');
+        const email = document.getElementById('email');
+
+        if (!firstName || !email || !firstName.value.trim() || !email.validity.valid) {
+          return;
+        }
+
+        const mailchimpForm = document.createElement('form');
+        mailchimpForm.action = leadForm.action;
+        mailchimpForm.method = 'post';
+        mailchimpForm.target = 'mailchimpSubmitFrame';
+        mailchimpForm.style.display = 'none';
+
+        const values = {
+          FNAME: firstName.value.trim(),
+          EMAIL: email.value.trim(),
+          tags: '3512685',
+          b_9d11a72a3736b1f1dd92fdfc9_b895da0481: ''
+        };
+
+        Object.entries(values).forEach(([name, value]) => {
+          const input = document.createElement('input');
+          input.type = 'hidden';
+          input.name = name;
+          input.value = value;
+          mailchimpForm.appendChild(input);
+        });
+
+        document.body.appendChild(mailchimpForm);
+        mailchimpForm.submit();
+        mailchimpForm.remove();
+      }, true);
+    });
+  </script>
   <script src="app.js"></script>
   <script>
     if ('serviceWorker' in navigator) {
