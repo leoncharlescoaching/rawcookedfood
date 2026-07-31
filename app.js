@@ -30,7 +30,7 @@ function revealApp(){
 }
 
 async function submitLead(payload){
-  // Always keep a local record so the tool unlocks even if the network call below fails.
+  // Keep a local record for attribution/debugging.
   localStorage.setItem("lcc_raw_cooked_lead", JSON.stringify({
     ...payload,
     capturedAt: new Date().toISOString()
@@ -43,6 +43,7 @@ async function submitLead(payload){
   const params = new URLSearchParams();
   params.append("FNAME", payload.firstName);
   params.append("EMAIL", payload.email);
+  params.append("tags", "3512685");
   params.append(MAILCHIMP_HONEYPOT_FIELD, ""); // anti-spam honeypot — must stay blank
 
   // list-manage.com doesn't send CORS headers, so with mode:"no-cors" the response
